@@ -28,14 +28,24 @@ exports.showIndex = function(req, res, next) {
     });
 }
 
-exports.showPhoto = function(req, res) {
+exports.showPhoto = function(req, res, next) {
 
     //res.send("相册" + req.params.photoName);
     let photoName = req.params.photoName;
-    res.render('photo', {
-        'photoName': photoName,
-        "images": ["1.jpg", "2.jpg", "3.jpg"]
+    files.getAllImages(photoName, function(err, allImages) {
+        if (err) {
+            next();
+            return;
+        }
+
+        res.render('photo', {
+            'photoName': photoName,
+            "images": allImages
+        });
+
     });
+
+
 }
 
 // exports.showUp = function(req, res) {

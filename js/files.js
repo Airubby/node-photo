@@ -31,3 +31,33 @@ exports.getAllPhotos = function(callback) {
     });
 
 }
+
+
+exports.getAllImages = function(photoName, callback) {
+    fs.readdir("./uploads/" + photoName, function(err, files) {
+        if (err) {
+            callback(err.message, null);
+            return;
+        }
+
+        let allImages = [];
+        (function iterator(i) {
+
+            if (i == files.length) {
+                return callback(null, allImages);
+            }
+
+            fs.stat('./uploads/' + photoName + "/" + files[i], function(err, stats) {
+                if (err) {
+                    console.log(err);
+                }
+                if (stats.isFile()) {
+                    allImages.push(files[i]);
+                }
+                iterator(i + 1);
+            });
+
+        })(0);
+
+    });
+}
