@@ -48,8 +48,51 @@ exports.showPhoto = function(req, res, next) {
 
 }
 
-// exports.showUp = function(req, res) {
-//     res.render('up', {
-//         'photos': ['aa', 'bb', 'cc']
-//     })
-// }
+exports.showUp = function(req, res, next) {
+    files.getAllPhotos(function(err, allPhotos) {
+        if (err) {
+            next();
+            return;
+        }
+        res.render('up', {
+            'photos': allPhotos
+        })
+    });
+
+}
+
+exports.doUp = function(req, res) {
+
+    let form = new formidable.IncomingForm();
+    form.uploadDir = path.normalize(__dirname + "/../tempup/");
+
+    form.parse(req, function(err, fields, files, next) {
+
+        if (err) {
+            next();
+            return;
+        }
+
+        //console.log(fields) //{wenjianjia:'小狗'}
+
+        let wenjianjia = fields.wenjianjia;
+        let extname = path.extname(files.images.name);
+        let oldPath = files.images.path;
+
+        let ran = parseInt(Math.random() * 89999 + 10000);
+        let t = sd.format(new Date(), 'YYYYMMDDHHmmss');
+
+        let newPath = path.normalize(__dirname + "/../uploads/" + wenjianjia + "/" + t + ran + extname);
+
+        fs.rename(oldPath, newPath, function(err) {
+            if (err) {
+                res.send("上传失败");
+                return;
+            }
+            res.send("上传成功");
+        });
+
+
+    });
+
+}

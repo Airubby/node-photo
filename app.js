@@ -51,8 +51,8 @@ app.get("/", router.showIndex); //这个地方不需要将showIndex(req,res)req,
 //相册页
 app.get("/:photoName", router.showPhoto); //router中获取这个req.params.photoName；  photoName对应的
 //上传页面
-//app.get("/:up", router.showUp); //点击上传无效，还是到showPhoto
-
+app.get("/:up", router.showUp); //点击上传无效，还是到showPhoto；上面的做完后可以了？！！
+app.post("/:up", router.doUp);
 
 app.use(function(req, res) {
     res.render('err');
