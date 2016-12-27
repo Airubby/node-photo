@@ -48,6 +48,10 @@ app.use(express.static("./uploads"));
 
 //首页
 app.get("/", router.showIndex); //这个地方不需要将showIndex(req,res)req,res带过去，这里就是函数的引用
+//相册页
+app.get("/:photoName", router.showPhoto); //router中获取这个req.params.photoName；  photoName对应的
+//上传页面
+//app.get("/:up", router.showUp); //点击上传无效，还是到showPhoto
 
 
 app.use(function(req, res) {
