@@ -4,7 +4,7 @@ const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
 const sd = require('silly-datetime');
-
+const qs = require('querystring');
 
 exports.showIndex = function(req, res, next) {
     // res.render('index', { //得用回掉函数才行
@@ -75,6 +75,14 @@ exports.doUp = function(req, res) {
 
         //console.log(fields) //{wenjianjia:'小狗'}
 
+        let size = files.images.size;
+        if (size > (2 * 1024 * 1024)) {
+            res.send("图片尺寸应该小于2M");
+            //删除图片
+            fs.unlink(files.images.path);
+            return;
+        }
+
         let wenjianjia = fields.wenjianjia;
         let extname = path.extname(files.images.name);
         let oldPath = files.images.path;
@@ -94,5 +102,15 @@ exports.doUp = function(req, res) {
 
 
     });
+
+}
+
+exports.showAdd = function(req, res) {
+    res.render('add');
+}
+
+exports.doAdd = function(req, res, next) {
+
+
 
 }

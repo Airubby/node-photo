@@ -1,10 +1,8 @@
-"use strict"
-
 /*
 var express=require('express');
 var app=express();
-//var router=require("./js/router.js"); //不用这样写，在js下面写个package.json文件，写上入口文件为router就行了
-var router=require("./js");
+//var router=require("./controller/router.js"); //不用这样写，在controller下面写个package.json文件，写上入口文件为router就行了
+var router=require("./controller");
 
 app.set("view engine","ejs");
 
@@ -20,8 +18,7 @@ app.get("/",router.showIndex); //这个地方不需要将showIndex(req,res)req,r
 //就相当于  app.get("/",function(req,res){res.send("我是首页");})
 
 //下面这个admin就被静态文件中的占用了，就显示不了了	
-//解决办法  
-app.use(express.static("./public"));  //这个要放上面
+//解决办法  将app.use(express.static("./public"));
 app.get("/admin",function(req,res){
 	res.send("admin");
 });
@@ -32,12 +29,11 @@ app.listen(3000);
 */
 
 
+var express = require('express');
+var app = express();
+var router = require("./controller");
 
-const express = require('express');
-const app = express();
-const router = require('./js');
-
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
 //路由中间件
 //静态页面
@@ -48,16 +44,14 @@ app.use(express.static("./uploads"));
 
 //首页
 app.get("/", router.showIndex); //这个地方不需要将showIndex(req,res)req,res带过去，这里就是函数的引用
-//相册页
-app.get("/:photoName", router.showPhoto); //router中获取这个req.params.photoName；  photoName对应的
-//上传页面
-app.get("/up", router.showUp); //点击上传无效，还是到showPhoto；上面的做完后可以了？！！   不能要 /:up 的:
-app.post("/up", router.doUp);
-app.get("/add", router.showAdd);
-app.post("/add", router.doAdd);
+app.get("/:albumName", router.showAlbum);
+app.get("/:up", router.showUp);
+app.post("/:up", router.doPost);
 
+//404
 app.use(function(req, res) {
     res.render('err');
+    //res.status(404).send("没有这个页面！");
 });
 
-app.listen(3000);
+app.listen(4000);
